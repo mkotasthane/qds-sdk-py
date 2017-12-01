@@ -134,14 +134,17 @@ def _getresult(cmdclass, cmd, args=[]):
 
 
 def runaction(cmdclass, args):
-    args = cmdclass.parse(args)
-    if args is not None:
+    args = cmdclass.parse(args)     
+	if args is not None:
         print_logs = args.pop("print_logs") # We don't want to send this to the API.
-        cmd = cmdclass.run(**args)
-        if print_logs:
-            sys.stderr.write(cmd.get_log())
-        return _getresult(cmdclass, cmd)
-
+         try:            
+			cmd = cmdclass.run(**args)
+			if print_logs:
+				sys.stderr.write(cmd.get_log())
+			return _getresult(cmdclass, cmd)
+		except (KeyboardInterrupt, SystemError, SystemExit) as err:
+			cmd.cancel()
+			sys.stderr.write(str(err))
 
 def checkaction(cmdclass, args):
     if len(args) > 2:
