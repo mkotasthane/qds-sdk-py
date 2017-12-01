@@ -142,7 +142,7 @@ def runaction(cmdclass, args):
 			if print_logs:
 				sys.stderr.write(cmd.get_log())
 			return _getresult(cmdclass, cmd)
-		except (KeyboardInterrupt, SystemError, SystemExit) as err:
+		except (KeyboardInterrupt, SystemError, SystemExit) as err: # Kill job when killed via keyboard, system error or exit command from system
 			cmd.cancel()
 			sys.stderr.write(str(err))
 
